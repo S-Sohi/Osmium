@@ -74,6 +74,12 @@ fun HomePage(
                     color = MaterialTheme.colorScheme.primary
                 )
             }
+            if(state.cellInfo.id !=0){
+                Text("Detected Cell:")
+                Text("id: ${state.cellInfo.id}")
+                Text("gen: ${state.cellInfo.gen}G")
+                Text("power ${state.cellInfo.signalPower} dbm")
+            }
 
 
         }

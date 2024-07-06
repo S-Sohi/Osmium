@@ -19,15 +19,18 @@ data class HomeState(
     var hasPermission: Boolean,
     var isConnected: Boolean,
     var isLoading: Boolean,
-    var showGpsError: Boolean
+    var showGpsError: Boolean,
+    var cellInfo: CellInfo
 )
+
+data class CellInfo(val id:Int, val gen:Int, val signalPower:Int)
 
 enum class HomeEvent() {
     START, STOP
 }
 
 class HomeViewModel(context: Context, activity: MainActivity) : ViewModel() {
-    var state = mutableStateOf(HomeState(false, false, false, false))
+    var state = mutableStateOf(HomeState(false, false, false, false, CellInfo(0,0,0)))
         private set
 
     var locationService: LocationService = LocationService(context, activity)
@@ -58,12 +61,12 @@ class HomeViewModel(context: Context, activity: MainActivity) : ViewModel() {
             val cellInformation = x[1] as DetectedCellInfo
             val data = x[0] as LocationCordinate
             val cell: Cell = Cell(cellInformation.id,cellInformation.gen)
-//            db.cellDao().insert(cell)
+            state.value = state.value.copy(cellInfo = CellInfo(cell.cid,cell.gen,cellInformation.signalPower))
         }
 
     }
 
     fun stopMeasuring() {
-        state.value = state.value.copy(isLoading = false)
+        state.value = state.value.copy(isLoading = false, cellInfo = CellInfo(0,0,0))
     }
 }
