@@ -43,26 +43,23 @@ class HomeViewModel(context: Context, activity: MainActivity) : ViewModel() {
 
     @SuppressLint("CheckResult")
     fun startMeasuring() {
-//        val coordinate = locationService.getLocation()
-//        if (coordinate == null) {
-//            return
-//        }
-        customPhoneStateListener.attachListener()
-        customPhoneStateListener.signalChanged.subscribe{cellInformation ->
-            val cell: Cell = Cell(cellInformation.id,cellInformation.gen)
-            db.cellDao().insert(cell)
+        val coordinate = locationService.getLocation()
+        if (coordinate == null) {
+            return
         }
-//        Observable.combineLatest(locationService.locationChanged,customPhoneStateListener.signalChanged) { x1, x2 ->
-//            listOf(
-//                x1,
-//                x2
-//            )
-//        }.subscribe{ x:List<Any> ->
-//            state.value = state.value.copy(isLoading = true)
-//            val cellInformation = x[0] as DetectedCellInfo
-//            val data = x[1] as LocationCordinate
-//            val cell: Cell = Cell(cellInformation.id,cellInformation.gen)
-//        }
+        customPhoneStateListener.attachListener()
+        Observable.combineLatest(locationService.locationChanged,customPhoneStateListener.signalChanged) { x1, x2 ->
+            listOf(
+                x1,
+                x2
+            )
+        }.subscribe{ x:List<Any> ->
+            state.value = state.value.copy(isLoading = true)
+            val cellInformation = x[1] as DetectedCellInfo
+            val data = x[0] as LocationCordinate
+            val cell: Cell = Cell(cellInformation.id,cellInformation.gen)
+//            db.cellDao().insert(cell)
+        }
 
     }
 

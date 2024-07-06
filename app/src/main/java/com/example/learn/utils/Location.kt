@@ -76,7 +76,7 @@ class LocationService() {
     }
 
     @SuppressLint("MissingPermission")
-    public fun getLocation(): LocationCordinate? {
+    public fun getLocation(): PublishSubject<LocationCordinate>? {
         if (!isGpsEnabled()) {
             alertDialogBuilder.setTitle("Error")
             alertDialogBuilder.setMessage("Gps is Off")
@@ -95,7 +95,7 @@ class LocationService() {
                 }
 
             }
-        return null
+        return this.locationChanged
     }
 
 }

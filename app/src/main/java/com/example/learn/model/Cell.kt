@@ -7,7 +7,7 @@ import androidx.room.*
 
 @Entity(tableName = "Cell")
 data class Cell(
-    @PrimaryKey(autoGenerate = false) val cid: Int? = null,
+    @PrimaryKey(autoGenerate = false) val cid: Int,
     val gen: Int
 )
 
